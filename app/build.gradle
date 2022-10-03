@@ -42,6 +42,9 @@ android {
 }
 
 dependencies {
+    testImplementation project(path: ':app')
+    androidTestImplementation project(path: ':app')
+
     def multidex_version = "2.0.1"
     implementation "androidx.multidex:multidex:$multidex_version"
 
