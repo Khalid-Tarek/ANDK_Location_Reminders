@@ -10,24 +10,82 @@
             type="com.udacity.project4.locationreminders.reminderslist.ReminderDataItem" />
     </data>
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
         android:orientation="vertical"
         tools:context=".locationreminders.ReminderDescriptionActivity">
-        <!--TODO: add the design of the reminder details-->
+        <!--DONE: add the design of the reminder details-->
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="Reminder Details"
-            android:textSize="@dimen/text_size_large"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:id="@+id/fragmentLabel"
+            style="@style/styleLocationReminderItem"
+            android:text="@string/string_location_reminder"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-    </LinearLayout>
+        <TextView
+            android:id="@+id/title"
+            style="@style/styleLocationReminderItem"
+            android:text="@{reminderDataItem.title}"
+            app:layout_constraintBottom_toTopOf="@id/description"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/fragmentLabel"
+            tools:text="Title" />
+
+        <TextView
+            android:id="@+id/description"
+            style="@style/styleLocationReminderItem"
+            android:text="@{reminderDataItem.description}"
+            app:layout_constraintBottom_toTopOf="@id/longitudeLabel"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/title"
+            tools:text="Description" />
+
+        <TextView
+            android:id="@+id/longitudeLabel"
+            style="@style/styleLocationReminderItem"
+            android:labelFor="@id/longitude"
+            android:text="@string/stringLongitude"
+            app:layout_constraintBottom_toTopOf="@id/latitudeLabel"
+            app:layout_constraintEnd_toStartOf="@id/longitude"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/description" />
+
+        <TextView
+            android:id="@+id/longitude"
+            style="@style/styleLocationReminderItem"
+            android:text="@{reminderDataItem.longitude.toString()}"
+            app:layout_constraintBottom_toBottomOf="@id/longitudeLabel"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/longitudeLabel"
+            app:layout_constraintTop_toTopOf="@id/longitudeLabel"
+            tools:text="50" />
+
+        <TextView
+            android:id="@+id/latitudeLabel"
+            style="@style/styleLocationReminderItem"
+            android:labelFor="@id/latitude"
+            android:text="@string/stringLatitude"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/latitude"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/longitudeLabel" />
+
+        <TextView
+            android:id="@+id/latitude"
+            style="@style/styleLocationReminderItem"
+            android:text="@{reminderDataItem.latitude.toString()}"
+            app:layout_constraintBottom_toBottomOf="@id/latitudeLabel"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/latitudeLabel"
+            app:layout_constraintTop_toTopOf="@id/latitudeLabel"
+            tools:text="50" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
