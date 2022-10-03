@@ -13,6 +13,7 @@ android {
         applicationId "com.udacity.project4"
         minSdkVersion rootProject.minSdkVersion
         targetSdkVersion rootProject.targetSdkVersion
+        multiDexEnabled true
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -41,6 +42,9 @@ android {
 }
 
 dependencies {
+    def multidex_version = "2.0.1"
+    implementation "androidx.multidex:multidex:$multidex_version"
+
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     // App dependencies
     implementation "androidx.appcompat:appcompat:$appCompatVersion"
@@ -53,6 +57,7 @@ dependencies {
     implementation "androidx.constraintlayout:constraintlayout:$constraintVersion"
 
     implementation 'com.google.code.gson:gson:2.8.5'
+    implementation 'com.google.android.gms:play-services-location:20.0.0'
 
     // Architecture Components
     //Navigation dependencies
@@ -123,5 +128,6 @@ dependencies {
     implementation "com.google.android.gms:play-services-maps:$playServicesVersion"
 
     //Firebase
-    implementation platform('com.google.firebase:firebase-bom:30.4.1')
+    //implementation platform('com.google.firebase:firebase-bom:30.4.1')
+    implementation 'com.firebaseui:firebase-ui-auth:5.0.0'
 }
