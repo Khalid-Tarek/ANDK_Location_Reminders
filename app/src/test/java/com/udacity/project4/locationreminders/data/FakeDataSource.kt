@@ -4,7 +4,8 @@ import com.udacity.project4.locationreminders.data.dto.ReminderDTO
 import com.udacity.project4.locationreminders.data.dto.Result
 
 //Use FakeDataSource that acts as a test double to the LocalDataSource
-class FakeDataSource : ReminderDataSource {
+class FakeDataSource(private val reminders: LinkedHashMap<String, ReminderDTO>? = LinkedHashMap()) :
+    ReminderDataSource {
 
 //    DONE: Create a fake data source to act as a double to the real data source
 
@@ -12,17 +13,17 @@ class FakeDataSource : ReminderDataSource {
         const val INVALID_DTO_ID = 101
     }
 
-    private val reminders = LinkedHashMap<String, ReminderDTO>()
-
     override suspend fun getReminders(): Result<List<ReminderDTO>> {
-        return Result.Success(reminders.values.toList())
+        reminders?.let { return Result.Success(reminders.values.toList()) }
+        return Result.Error("No reminders list")
     }
 
     override suspend fun saveReminder(reminder: ReminderDTO) {
-        reminders[reminder.id] = reminder
+        reminders?.set(reminder.id, reminder)
     }
 
     override suspend fun getReminder(id: String): Result<ReminderDTO> {
+        if(reminders == null) return Result.Error("No reminders list")
         return if(reminders.containsKey(id)){
             Result.Success(reminders[id]!!)
         } else {
@@ -31,6 +32,6 @@ class FakeDataSource : ReminderDataSource {
     }
 
     override suspend fun deleteAllReminders() {
-        reminders.clear()
+        reminders?.clear()
     }
 }
