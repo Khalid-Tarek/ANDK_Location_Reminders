@@ -15,28 +15,5 @@ import org.junit.runner.RunWith
 class SaveReminderViewModelTest {
     //TODO: provide testing to the SaveReminderView and its live data objects
 
-    @Test
-    fun onClear_allLiveDataValuesCleared(){
-        //Given a SaveReminderViewModel
-        val saveReminderViewModel = SaveReminderViewModel(ApplicationProvider.getApplicationContext(), FakeDataSource())
-
-        //When onClear() is called
-        saveReminderViewModel.onClear()
-
-        //Then all live data values must be null
-        assertThat(saveReminderViewModel.reminderTitle.value, nullValue())
-    }
-
-
-
-    @Test
-    fun something(){
-        //GIVEN
-
-        //WHEN
-
-        //THEN
-
-    }
 
 }
