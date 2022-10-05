@@ -11,17 +11,19 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.nullValue
 import org.hamcrest.MatcherAssert.assertThat
+import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.koin.core.context.stopKoin
 import org.mockito.ArgumentMatchers.isNull
 
 @ExperimentalCoroutinesApi
 @RunWith(AndroidJUnit4::class)
 class SaveReminderViewModelTest {
 
-    //TODO: provide testing to the SaveReminderView and its live data objects
+    //DONE: provide testing to the SaveReminderView and its live data objects
 
     private lateinit var saveReminderViewModel: SaveReminderViewModel
 
@@ -32,6 +34,11 @@ class SaveReminderViewModelTest {
     fun setupViewModel() {
         saveReminderViewModel =
             SaveReminderViewModel(ApplicationProvider.getApplicationContext(), FakeDataSource())
+    }
+
+    @After
+    fun tearDown() {
+        stopKoin()
     }
 
     @Test
