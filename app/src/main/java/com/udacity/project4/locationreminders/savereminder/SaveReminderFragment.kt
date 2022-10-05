@@ -80,7 +80,7 @@ class SaveReminderFragment : BaseFragment() {
             geofencingClient = LocationServices.getGeofencingClient(requireActivity())
             addGeofenceForClue(reminder)
 
-            _viewModel.saveReminder(reminder)
+            _viewModel.validateAndSaveReminder(reminder)
         }
     }
 
