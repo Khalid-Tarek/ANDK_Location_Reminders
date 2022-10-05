@@ -18,8 +18,7 @@ import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runBlockingTest
 import kotlinx.coroutines.test.setMain
-import org.hamcrest.CoreMatchers.`is`
-import org.hamcrest.CoreMatchers.notNullValue
+import org.hamcrest.CoreMatchers.*
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.After
 import org.junit.Test
@@ -100,4 +99,15 @@ class RemindersDaoTest {
         assertThat(returnedReminders.isEmpty(), `is`(true))
     }
 
+    @Test
+    fun getReminderById_invalidId_returnNull() = testCoroutineDispatcher.runBlockingTest{
+        //GIVEN - An invalid id
+        val invalidId = ""
+
+        //WHEN - getReminderById() is called
+        val returnedReminder = database.reminderDao().getReminderById(invalidId)
+
+        //THEN - the returnedReminder is null
+        assertThat(returnedReminder, `is`(nullValue()))
+    }
 }

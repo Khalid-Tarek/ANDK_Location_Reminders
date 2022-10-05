@@ -10,6 +10,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.commit
+import androidx.test.espresso.idling.CountingIdlingResource
 import com.google.android.gms.location.Geofence
 import com.google.android.gms.location.GeofencingClient
 import com.google.android.gms.location.GeofencingRequest
@@ -102,18 +105,9 @@ class SaveReminderFragment : BaseFragment() {
             addOnCompleteListener {
                 geofencingClient.addGeofences(geofencingRequest, geofencePendingIntent).run {
                     addOnSuccessListener {
-                        Toast.makeText(
-                            requireContext(), "Added Geofence",
-                            Toast.LENGTH_SHORT
-                        )
-                            .show()
-                        Log.e("Add Geofence", geofence.requestId)
+                        Log.i("Add Geofence", geofence.requestId)
                     }
                     addOnFailureListener {
-                        Toast.makeText(
-                            requireContext(), "Failure to add Geofence",
-                            Toast.LENGTH_SHORT
-                        ).show()
                         if ((it.message != null)) {
                             Log.w(TAG, it.message!!)
                         }

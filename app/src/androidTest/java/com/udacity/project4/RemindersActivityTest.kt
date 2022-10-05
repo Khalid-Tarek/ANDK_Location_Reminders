@@ -135,8 +135,8 @@ class RemindersActivityTest :
         //Select a position on the screen and navigate back to SaveReminder Fragment
         onView(withId(R.id.map_fragment)).perform(longClick()).perform(click())
 
-        //Wait until navigation is complete
-        while(navController?.currentDestination?.id != R.id.saveReminderFragment) {}
+        //Wait until navigation is complete (couldn't find another way to wait)
+        Thread.sleep(200)
 
         //Save the reminder
         onView(withId(R.id.saveReminder)).perform(click())

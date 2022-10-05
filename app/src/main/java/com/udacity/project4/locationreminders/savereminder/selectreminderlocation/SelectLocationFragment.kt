@@ -28,6 +28,7 @@ import com.udacity.project4.utils.setDisplayHomeAsUpEnabled
 import kotlinx.android.synthetic.main.fragment_select_location.*
 import org.koin.android.ext.android.inject
 import java.util.*
+import kotlin.math.roundToInt
 
 
 class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
@@ -68,6 +69,7 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         //         and navigate back to the previous fragment to save the reminder and add the geofence
         _viewModel.longitude.value = long
         _viewModel.latitude.value = lat
+        _viewModel.reminderSelectedLocationStr.value = "(${lat.roundToInt()}, ${long.roundToInt()})"
         _viewModel.selectedPOI.value = poi
 
         findNavController().navigateUp()
