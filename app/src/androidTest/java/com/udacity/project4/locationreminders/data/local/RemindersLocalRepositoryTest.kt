@@ -4,14 +4,16 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.MediumTest
 import com.udacity.project4.locationreminders.data.dto.ReminderDTO
 import com.udacity.project4.locationreminders.data.dto.Result
-import com.udacity.project4.locationreminders.reminderslist.RemindersListViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.TestCoroutineDispatcher
+import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.test.setMain
 import org.hamcrest.CoreMatchers.`is`
-import org.hamcrest.CoreMatchers.instanceOf
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.core.IsEqual
+import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -21,6 +23,8 @@ import org.junit.runner.RunWith
 //Medium Test to test the repository
 @MediumTest
 class RemindersLocalRepositoryTest {
+
+    private val testCoroutineDispatcher = TestCoroutineDispatcher()
 
     //    DONE: Add testing implementation to the RemindersLocalRepository.kt
     private val reminder1 = ReminderDTO("Title1", "Description1", "Location1", 0.0, 0.0)
@@ -34,14 +38,22 @@ class RemindersLocalRepositoryTest {
 
     @Before
     fun init() {
+        Dispatchers.setMain(testCoroutineDispatcher)
+
         fakeReminderDTO = FakeReminderDao(reminders)
 
         repository = RemindersLocalRepository(fakeReminderDTO, Dispatchers.Unconfined)
     }
 
+    @After
+    fun end() {
+        Dispatchers.resetMain()
+        testCoroutineDispatcher.cleanupTestCoroutines()
+    }
+
     @ExperimentalCoroutinesApi
     @Test
-    fun getReminders_returnsAllReminders() = runBlockingTest{
+    fun getReminders_returnsAllReminders() = testCoroutineDispatcher.runBlockingTest {
         //WHEN we all getReminders()
         val returnReminders = repository.getReminders() as Result.Success<List<ReminderDTO>>
 
@@ -51,7 +63,7 @@ class RemindersLocalRepositoryTest {
 
     @ExperimentalCoroutinesApi
     @Test
-    fun getInvalidReminder_returnsError() = runBlockingTest {
+    fun getInvalidReminder_returnsError() = testCoroutineDispatcher.runBlockingTest {
         //WHEN we request an id that doesn't exist
         val returnReminder = repository.getReminder("") as Result.Error
 
@@ -61,21 +73,23 @@ class RemindersLocalRepositoryTest {
 
     @ExperimentalCoroutinesApi
     @Test
-    fun saveReminder_getSameReminder_bothRemindersEqual() = runBlockingTest{
-        //GIVEN a reminderDTO
-        val originalReminder = ReminderDTO("Title", "Description", "Location", 0.0, 0.0)
+    fun saveReminder_getSameReminder_bothRemindersEqual() =
+        testCoroutineDispatcher.runBlockingTest {
+            //GIVEN a reminderDTO
+            val originalReminder = ReminderDTO("Title", "Description", "Location", 0.0, 0.0)
 
-        //WHEN the reminder is saved and requested
-        repository.saveReminder(originalReminder)
-        val returnedReminder = repository.getReminder(originalReminder.id) as Result.Success<ReminderDTO>
+            //WHEN the reminder is saved and requested
+            repository.saveReminder(originalReminder)
+            val returnedReminder =
+                repository.getReminder(originalReminder.id) as Result.Success<ReminderDTO>
 
-        //THEN the reminders are the same
-        assertThat(returnedReminder.data, `is`(originalReminder))
-    }
+            //THEN the reminders are the same
+            assertThat(returnedReminder.data, `is`(originalReminder))
+        }
 
     @ExperimentalCoroutinesApi
     @Test
-    fun deleteAllReminders_reminderListEmpty() = runBlockingTest {
+    fun deleteAllReminders_reminderListEmpty() = testCoroutineDispatcher.runBlockingTest {
         //WHEN deleteAllReminders() is called
         repository.deleteAllReminders()
         val remindersList = repository.getReminders() as Result.Success<List<ReminderDTO>>
