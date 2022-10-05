@@ -32,7 +32,7 @@ class RemindersDaoTest {
 
     private val testCoroutineDispatcher = TestCoroutineDispatcher()
 
-    //    TODO: Add testing implementation to the RemindersDao.kt
+    //    DONE: Add testing implementation to the RemindersDao.kt
     @get:Rule
     var instantExecutorRule = InstantTaskExecutorRule()
 
