@@ -48,7 +48,7 @@ class ReminderListFragmentTest {
     val instantExecutorRule = InstantTaskExecutorRule()
 
     @Before
-    fun init1() {
+    fun init() {
         Dispatchers.setMain(testCoroutineDispatcher)
         testCoroutineDispatcher.runBlockingTest {
             database = Room.databaseBuilder(

@@ -1,5 +1,6 @@
 package com.udacity.project4
 
+import android.app.Activity
 import android.app.Application
 import android.util.Log
 import androidx.navigation.NavController
@@ -14,6 +15,7 @@ import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.idling.CountingIdlingResource
+import androidx.test.espresso.matcher.RootMatchers.withDecorView
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
@@ -32,6 +34,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runBlockingTest
 import org.hamcrest.CoreMatchers.`is`
+import org.hamcrest.CoreMatchers.not
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -115,12 +118,8 @@ class RemindersActivityTest :
         val activityScenario = ActivityScenario.launch(RemindersActivity::class.java)
         dataBindingIdlingResource.monitorActivity(activityScenario)
 
-        val saveReminderViewModel: SaveReminderViewModel by inject()
-        var navController: NavController? = null
-
-        activityScenario.onActivity {
-            navController = it.nav_host_fragment.findNavController()
-        }
+        var activity: RemindersActivity? = null
+        activityScenario.onActivity { activity = it }
 
         //Navigate to SaveReminder Fragment
         onView(withId(R.id.addReminderFAB)).perform(click())
@@ -140,6 +139,9 @@ class RemindersActivityTest :
 
         //Save the reminder
         onView(withId(R.id.saveReminder)).perform(click())
+
+        //Check if a toast message appears
+        onView(withText(R.string.reminder_saved)).inRoot(withDecorView(not(activity!!.window.decorView))).check(matches(isDisplayed()))
 
         //Check if the reminder was created
         onView(withText("My Title")).check(matches(isDisplayed()))
