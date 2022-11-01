@@ -73,7 +73,7 @@ class RemindersListViewModelTest {
     }
 
     @Test
-    fun loadReminders_invalidDataSource_showSnackBarNotNull() {
+    fun loadReminders_invalidDataSource_showSnackBarWithExceptionMessage() {
         //GIVEN an invalid data source and the reminderViewModel
         val remindersListViewModel =
             RemindersListViewModel(
@@ -86,7 +86,7 @@ class RemindersListViewModelTest {
         //THEN showSnackBar LiveData value will not be null or empty
         assertThat(
             remindersListViewModel.showSnackBar.getOrAwaitValue(),
-            anyOf(notNullValue(), `is`(""))
+            `is`(Exception().message)
         )
     }
 

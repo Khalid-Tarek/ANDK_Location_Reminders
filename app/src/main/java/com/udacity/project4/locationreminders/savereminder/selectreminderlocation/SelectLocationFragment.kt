@@ -185,6 +185,13 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
             if (grantResults.isNotEmpty() && (grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
                 enableMyLocation()
             }
+            else {
+                Toast.makeText(
+                    requireContext(),
+                    "Please allow location permissions",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
         }
     }
 

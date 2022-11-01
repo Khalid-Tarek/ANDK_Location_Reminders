@@ -20,7 +20,11 @@ class FakeDataSource(private val reminders: LinkedHashMap<String, ReminderDTO> =
 
     override suspend fun getReminders(): Result<List<ReminderDTO>> {
         if(shouldReturnError)
-            return Result.Error("No reminders list")
+            try {
+                throw Exception()
+            } catch (e: Exception) {
+                return Result.Error(e.localizedMessage)
+            }
 
         return Result.Success(reminders.values.toList())
     }
@@ -31,12 +35,17 @@ class FakeDataSource(private val reminders: LinkedHashMap<String, ReminderDTO> =
 
     override suspend fun getReminder(id: String): Result<ReminderDTO> {
         if(shouldReturnError)
-            return Result.Error("ReminderDTO with this id doesn't Exist", INVALID_DTO_ID)
+            try {
+                throw Exception()
+            }
+            catch (e: Exception) {
+                return Result.Error(e.localizedMessage)
+            }
 
         return if(reminders.containsKey(id)){
             Result.Success(reminders[id]!!)
         } else {
-            Result.Error("ReminderDTO with this id doesn't Exist", INVALID_DTO_ID)
+            Result.Error("Reminder Not found!")
         }
     }
 
