@@ -9,10 +9,6 @@ class FakeDataSource(private val reminders: LinkedHashMap<String, ReminderDTO> =
 
 //    DONE: Create a fake data source to act as a double to the real data source
 
-    companion object {
-        const val INVALID_DTO_ID = 101
-    }
-
     private var shouldReturnError = false
     fun setReturnError(value: Boolean) {
         shouldReturnError = value
