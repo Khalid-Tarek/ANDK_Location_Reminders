@@ -21,7 +21,7 @@ class FakeDataSource(private val reminders: LinkedHashMap<String, ReminderDTO> =
     override suspend fun getReminders(): Result<List<ReminderDTO>> {
         if(shouldReturnError)
             try {
-                throw Exception()
+                throw Exception("Exception while retrieving data")
             } catch (e: Exception) {
                 return Result.Error(e.localizedMessage)
             }
@@ -36,7 +36,7 @@ class FakeDataSource(private val reminders: LinkedHashMap<String, ReminderDTO> =
     override suspend fun getReminder(id: String): Result<ReminderDTO> {
         if(shouldReturnError)
             try {
-                throw Exception()
+                throw Exception("Exception while retrieving data")
             }
             catch (e: Exception) {
                 return Result.Error(e.localizedMessage)
