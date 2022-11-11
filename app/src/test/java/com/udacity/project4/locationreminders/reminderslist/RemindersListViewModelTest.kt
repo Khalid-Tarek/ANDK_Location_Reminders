@@ -86,7 +86,7 @@ class RemindersListViewModelTest {
         //THEN showSnackBar LiveData value will not be null or empty
         assertThat(
             remindersListViewModel.showSnackBar.getOrAwaitValue(),
-            `is`(Exception().message)
+            `is`("Exception while retrieving data")
         )
     }
 

@@ -38,6 +38,8 @@ class SaveReminderFragment : BaseFragment() {
     private val LOCATION_PERMISSION_INDEX = 0
     private val BACKGROUND_LOCATION_PERMISSION_INDEX = 1
 
+    private var pendingReminder: ReminderDataItem? = null
+
     companion object {
         const val ACTION_GEOFENCE_EVENT = "ACTION_GEOFENCE_EVENT"
     }
@@ -96,6 +98,7 @@ class SaveReminderFragment : BaseFragment() {
                 // Location settings are not satisfied, but this can be fixed
                 // by showing the user a dialog.
                 try {
+                    pendingReminder = reminder
                     startIntentSenderForResult(
                         exception.resolution.intentSender,
                         REQUEST_TURN_DEVICE_LOCATION_ON,
@@ -205,7 +208,13 @@ class SaveReminderFragment : BaseFragment() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_TURN_DEVICE_LOCATION_ON) {
             // We don't rely on the result code, but just check the location setting again
-            checkDeviceLocationSettingsAndAddGeofence(false)
+            if(pendingReminder == null) Toast.makeText(
+                requireContext(),
+                "reminder is null!",
+                Toast.LENGTH_SHORT
+            ).show()
+            checkDeviceLocationSettingsAndAddGeofence(false, pendingReminder)
+            pendingReminder = null
         }
     }
 
