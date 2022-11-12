@@ -38,8 +38,6 @@ class SaveReminderFragment : BaseFragment() {
     private val LOCATION_PERMISSION_INDEX = 0
     private val BACKGROUND_LOCATION_PERMISSION_INDEX = 1
 
-    private var pendingReminder: ReminderDataItem? = null
-
     companion object {
         const val ACTION_GEOFENCE_EVENT = "ACTION_GEOFENCE_EVENT"
     }
@@ -98,7 +96,6 @@ class SaveReminderFragment : BaseFragment() {
                 // Location settings are not satisfied, but this can be fixed
                 // by showing the user a dialog.
                 try {
-                    pendingReminder = reminder
                     startIntentSenderForResult(
                         exception.resolution.intentSender,
                         REQUEST_TURN_DEVICE_LOCATION_ON,
@@ -208,14 +205,18 @@ class SaveReminderFragment : BaseFragment() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_TURN_DEVICE_LOCATION_ON) {
             // We don't rely on the result code, but just check the location setting again
-            if(pendingReminder == null) Toast.makeText(
-                requireContext(),
-                "reminder is null!",
-                Toast.LENGTH_SHORT
-            ).show()
-            checkDeviceLocationSettingsAndAddGeofence(false, pendingReminder)
-            pendingReminder = null
+            checkDeviceLocationSettingsAndAddGeofence(false, getCurrentReminder())
         }
+    }
+
+    private fun getCurrentReminder(): ReminderDataItem {
+        val title = _viewModel.reminderTitle.value
+        val description = _viewModel.reminderDescription.value
+        val location = _viewModel.reminderSelectedLocationStr.value
+        val latitude = _viewModel.latitude.value
+        val longitude = _viewModel.longitude.value
+
+        return ReminderDataItem(title, description, location, latitude, longitude)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -231,17 +232,11 @@ class SaveReminderFragment : BaseFragment() {
 
     private fun addSaveOnClickListener() {
         binding.saveReminder.setOnClickListener {
-            val title = _viewModel.reminderTitle.value
-            val description = _viewModel.reminderDescription.value
-            val location = _viewModel.reminderSelectedLocationStr.value
-            val latitude = _viewModel.latitude.value
-            val longitude = _viewModel.longitude.value
-
             //            DONE: use the user entered reminder details to:
             //             1) add a geofencing request
             //             2) save the reminder to the local db
 
-            val reminder = ReminderDataItem(title, description, location, latitude, longitude)
+            val reminder = getCurrentReminder()
             geofencingClient = LocationServices.getGeofencingClient(requireActivity())
             checkPermissionsAndAddGeofence(reminder)
         }
